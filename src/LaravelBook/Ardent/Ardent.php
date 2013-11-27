@@ -225,7 +225,7 @@ abstract class Ardent extends Model {
                 if (method_exists($myself, $method)) {
                     $eventMethod = $rad.$event;
                     self::$eventMethod(function($model) use ($method){
-                        return $model->$method();
+                        return $model->$method($model);
                     });
                 }
             }
@@ -351,11 +351,13 @@ abstract class Ardent extends Model {
 	 * Overriden from {@link Eloquent\Model} to allow the usage of the intermediary methods to handle the {@link
 	 * $relationsData} array.
 	 *
-	 * @param  string  $related
-	 * @param  string  $foreignKey
+     * @param  string  $related
+     * @param  string  $foreignKey
+     * @param  string  $otherKey
+     * @param  string  $relation
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
-	public function belongsTo($related, $foreignKey = null) {
+	public function belongsTo($related, $foreignKey = null, $otherKey = null, $relation = null) {
 		$backtrace = debug_backtrace(false);
 		$caller = ($backtrace[1]['function'] == 'handleRelationalArray')? $backtrace[3] : $backtrace[1];
 
